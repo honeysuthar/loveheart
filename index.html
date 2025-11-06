@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I Love You Heart</title>
+  <style>
+    body {
+      background: #000;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    #heart {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  transform: rotateY(10deg) rotateX(5deg); /* steady tilt */
+  transform-style: preserve-3d;
+}
+
+    .word {
+      position: absolute;
+      color: #ff5fa2;
+      font-weight: bold;
+      text-shadow: 0 0 10px #fff;
+      font-size: 16px;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="heart"></div>
+
+  <script>
+    const heart = document.getElementById('heart');
+    const total = 80; // number of "I love you" texts
+    const scale = 14; // heart size
+    const speed = 0.01; // rotation speed
+    const words = [];
+
+    // create and store word elements
+    for (let i = 0; i < total; i++) {
+      const span = document.createElement('span');
+      span.className = 'word';
+      span.textContent = 'I love you';
+      heart.appendChild(span);
+      words.push(span);
+    }
+
+    let angleOffset = 0;
+
+    function animate() {
+      angleOffset += speed;
+
+      for (let i = 0; i < total; i++) {
+        const t = (i / total) * 2 * Math.PI + angleOffset;
+
+        // heart equation
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+
+        // rotate around heart path
+        const r = t + angleOffset;
+
+        const cx = 300 + x * scale;
+        const cy = 300 - y * scale;
+
+        const span = words[i];
+        span.style.left = cx + 'px';
+        span.style.top = cy + 'px';
+        span.style.transform = `translate(-50%, -50%) rotate(${(r * 180 / Math.PI) % 360}deg)`;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
